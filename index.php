@@ -71,10 +71,11 @@ $posts = $stmt->fetchALL(PDO::FETCH_ASSOC);
 		<h1>投稿されたメッセージ</h1>
 		<?php if (count($posts)) : ?>
 			<?php foreach ($posts as $post) : ?>
-				<li>
+				<li style="list-style-type: none;">
 					[#<?php echo h($post['id']) ?>]
 					@<?php echo h($post['name']) ?><br>
 					<?php echo h($post['message']) ?><br>
+					<a href="edit.php?id=<?php echo h($post['id']) ?>">[編集]</a>
 					<?php echo h($post['updated_at']) ?>
 					<hr>
 				</li>
