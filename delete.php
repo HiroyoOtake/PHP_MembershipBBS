@@ -13,7 +13,7 @@ $stmt->execute();
 
 $row = $stmt->fetch();
 
-// var_dump($row);
+var_dump($row);
 
 if (!$row)
 {
@@ -21,6 +21,13 @@ if (!$row)
 	exit;
 }
 
-echo 'delete.php';
+$sql_delete = "delete from posts where id = :id";
+$stmt_delete = $dbh->prepare($sql_delete);
+$stmt_delete->bindParam(":id", $id);
+$stmt_delete->execute();
+
+header('Location: index.php');
+exit;
+
 
 ?>
