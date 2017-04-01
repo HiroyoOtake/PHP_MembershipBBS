@@ -31,6 +31,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	//バリデーション突破後
 	if (empty($errors))
  	{
+		$dbh = connectDatabase();
+		$sql = "select * from users where name = :name and email = :email";
+		$stmt = $dbh->prepare($sql);
+		$stmt->bindParam(":name", $name);
+		$stmt->bindParam(":email", $email);
+		$stmt->execute();
+
+		$row = $stmt->fetch();
+
+		if ($row)
+		{
+			$_SESSION['id'] = $row['id'];
+			header('Location: index.php');
+			exit;
+		}
+		else
+		{
+			echo 'ユーザーネームかメールアドレスが間違っています';
+		}
 	}
 }
 
