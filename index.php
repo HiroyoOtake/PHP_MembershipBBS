@@ -34,10 +34,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	$stmt->execute();
 
 	// ログイン画面へとばす
-	header('Location: login.php');
+	header('Location: index.php');
 	exit();
 	}
 }
+
+$dbh = connectDatabase();
+$sql = "select * from posts order by updated_at desc";
+$stmt = $dbh->prepare($sql);
+$stmt->execute();
+
+$posts = $stmt->fetchALL(PDO::FETCH_ASSOC);
+
+// var_dump($posts);
 
 ?>
 
@@ -60,5 +69,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		</form>
 		<hr>
 		<h1>投稿されたメッセージ</h1>
+		<?php if (count($posts)) : ?>
+			<?php foreach ($posts as $post) : ?>
+				<li>
+					[#<?php echo h($post['id']) ?>]
+					@<?php echo h($post['name']) ?><br>
+					<?php echo h($post['message']) ?><br>
+					<?php echo h($post['updated_at']) ?>
+					<hr>
+				</li>
+			<?php endforeach ?>
+		<?php else : ?>
+			投稿されたメッセージはありません
+		<?php endif ?>
 	</body>
 </html>
