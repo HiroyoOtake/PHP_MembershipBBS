@@ -1,11 +1,42 @@
 <?php
 
+require_once('config.php');
+require_once('functions.php');
+
 session_start();
 
 if (empty($_SESSION['id']))
 {
 	header('Location: login.php');
 	exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST')
+{
+	$name = $_SESSION['name'];
+	$message = $_POST['message'];
+	$errors = array();
+
+	// バリデーション
+	if ($message == '')
+	{
+		$errors['message'] = 'メッセージが未入力です。';
+	}
+
+	//バリデーション突破後
+	if (empty($errors))
+	{
+	$dbh = connectDatabase();
+	$sql = "insert into users (name, email, created_at) values (:name, :email, now())";
+	$stmt = $dbh->prepare($sql);
+	$stmt->bindParam(":name", $name);
+	$stmt->bindParam(":email", $email);
+	$stmt->execute();
+
+	// ログイン画面へとばす
+	header('Location: login.php');
+	exit();
+	}
 }
 
 ?>
@@ -22,6 +53,9 @@ if (empty($_SESSION['id']))
 		<p>一言どうぞ!</p>
 		<form action="" method="post">
 			<textarea name="message" cols="30" rows="5"></textarea>
+			<?php if ($errors['message']) : ?>
+				<?php echo h($errors['message']) ?>
+			<?php endif ?>
 			<input type="submit" value="投稿する">
 		</form>
 		<hr>
