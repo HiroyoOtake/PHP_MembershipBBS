@@ -27,10 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	if (empty($errors))
 	{
 	$dbh = connectDatabase();
-	$sql = "insert into users (name, email, created_at) values (:name, :email, now())";
+	$sql = "insert into posts (name, message, created_at, updated_at) values (:name, :message, now(), now())";
 	$stmt = $dbh->prepare($sql);
 	$stmt->bindParam(":name", $name);
-	$stmt->bindParam(":email", $email);
+	$stmt->bindParam(":message", $message);
 	$stmt->execute();
 
 	// ログイン画面へとばす
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		<title>会員制掲示板</title>
 	</head>
 	<body>
-		<h1>Xさん 会員制掲示板へようこそ!</h1>
+	<h1><?php echo h($_SESSION['name']) ?>さん 会員制掲示板へようこそ!</h1>
 		<p><a href="logout.php">ログアウト</a></p>
 		<p>一言どうぞ!</p>
 		<form action="" method="post">
