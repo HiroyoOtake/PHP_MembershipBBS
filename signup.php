@@ -19,6 +19,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	{
 		$errors['email'] = 'メールアドレスが未入力です。';
 	}
+
+	//バリデーション突破後
+	if (empty($errors))
+	{
+		$dbh = connectDatabase();
+		$sql = "insert into users (name, email, created_at) values (:name, :email, now())";
+		$stmt = $dbh->prepare($sql);
+		$stmt->bindParam(":name", $name);
+		$stmt->bindParam(":email", $email);
+		$stmt->execute();
+
+		// ログイン画面へとばす
+		header('Location: login.php');
+		exit();
+	}
 }
 
 ?>
@@ -47,5 +62,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			</p>
 			<input type="submit" value="登録する">
 		</form>
+		<a href="login.php">ログイン画面へ</a>
 	</body>
 </html>
