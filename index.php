@@ -18,6 +18,7 @@ if (empty($_SESSION['id']))
 	</head>
 	<body>
 		<h1>Xさん 会員制掲示板へようこそ!</h1>
+		<p><a href="logout.php">ログアウト</a></p>
 		<p>一言どうぞ!</p>
 		<form action="" method="post">
 			<textarea name="message" cols="30" rows="5"></textarea>
